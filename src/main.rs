@@ -1,17 +1,54 @@
 fn main() {
 
-    let text = String::from("text to work with");
+    // let text = String::from("text to work with");
 
     // let first_word = first_word(&text);
 
     // println!("TEXT: {text}|");
     // println!("FIRST WORD OF TEXT: {first_word}|");
 
-    println!("{text}");
+    // println!("{text}");
     
-    let ans = replace_char_by(&text, ' ', '/');
+    // let ans = replace_char_by(&text, ' ', '/');
 
-    println!("{ans}");
+    // println!("{ans}");
+
+    let vecs: Vec<i32> = vec![3,3,1];
+    let target = 6;
+
+    // for (i, v) in vecs.iter().enumerate(){
+    //     println!("{i} {v}");
+    // }
+
+    let t_sum = two_sum(vecs, target);
+
+    for v in t_sum{
+        println!("{v}");
+    }
+}
+
+// return indexes of values in vector which sum is target 
+fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+    // Instance of the vec result to be pushed in the loop 
+    let mut result: Vec<i32> = Vec::new();
+
+    // Enumerate through the vector using index and value
+    for (i, v) in nums.iter().enumerate(){
+        let substracted = target - v; 
+        let mut outer_vec = nums.clone();
+        outer_vec.remove(i);
+        if outer_vec.iter().any(|&x| x == substracted){
+            if let Some(j) = nums.iter().position(|&x| x == substracted){
+                if j != i {
+                    result.push(i as i32);
+                    result.push(j as i32);
+                    return result;
+                }
+            }
+        }
+    }
+
+    return result;
 }
 
 // Return the index of the first whitespace in a string, or the last index in case of no whitespace
