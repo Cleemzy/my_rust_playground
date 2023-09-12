@@ -13,18 +13,52 @@ fn main() {
 
     // println!("{ans}");
 
-    let vecs: Vec<i32> = vec![3,3,1];
-    let target = 6;
+    // let vecs: Vec<i32> = vec![3,3,1];
+    // let target = 6;
 
     // for (i, v) in vecs.iter().enumerate(){
     //     println!("{i} {v}");
     // }
 
-    let t_sum = two_sum(vecs, target);
+    // let t_sum = two_sum(vecs, target);
 
-    for v in t_sum{
-        println!("{v}");
-    }
+    // for v in t_sum{
+    //     println!("{v}");
+    // }
+    
+    let u1 = User{
+        username: String::from("marc"),
+        email: String::from("marc@mail.com"),
+        age: 50,
+    };
+
+    
+
+    let u2 = User{
+        username: String::from("tori"),
+        email: String::from("tori@mail.com"),
+        ..u1
+    };
+
+    print_user(&u1);
+    print_user(&u2);
+
+}
+
+struct User{
+    username: String,
+    email: String,
+    age: u32 
+}
+
+fn print_user(u: &User){
+    println!("username: {}", u.username);
+    println!("email: {}", u.email);
+    println!("age: {}", u.age);
+}
+
+fn change_str(s: &mut String){
+    s.push_str(" p")
 }
 
 // return indexes of values in vector which sum is target 
