@@ -26,23 +26,46 @@ fn main() {
     //     println!("{v}");
     // }
     
-    let u1 = User{
-        username: String::from("marc"),
-        email: String::from("marc@mail.com"),
-        age: 50,
-    };
+    // let u1 = User{
+    //     username: String::from("marc"),
+    //     email: String::from("marc@mail.com"),
+    //     age: 50,
+    // };
 
     
 
-    let u2 = User{
-        username: String::from("tori"),
-        email: String::from("tori@mail.com"),
-        ..u1
+    // let u2 = User{
+    //     username: String::from("tori"),
+    //     email: String::from("tori@mail.com"),
+    //     ..u1
+    // };
+
+    // print_user(&u1);
+    // print_user(&u2);
+
+    let rect = Rectangle{
+        width: 55,
+        height: 20,
     };
 
-    print_user(&u1);
-    print_user(&u2);
+    println!("The area of the rectangle is : {} px square", rect.area());
 
+}
+
+fn area(rec: Rectangle) -> u32 {
+    rec.width * rec.height
+}
+
+impl Rectangle{
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+
+// Rectangle struct
+struct Rectangle{
+    width: u32,
+    height: u32
 }
 
 struct User{
