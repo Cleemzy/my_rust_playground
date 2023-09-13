@@ -43,12 +43,15 @@ fn main() {
     // print_user(&u1);
     // print_user(&u2);
 
-    let rect = Rectangle{
+    let mut rect = Rectangle{
         width: 55,
         height: 20,
     };
 
     // println!("The area of the rectangle is : {} px square", rect.area());
+
+    // let rev = Rectangle::reverse_rectangle(&rect);
+    rect.reverse();
 
     dbg!(rect);
 
@@ -62,6 +65,18 @@ impl Rectangle{
     // area method
     fn area(&self) -> u32 {
         self.width * self.height
+    }
+
+    fn reverse_rectangle(rec: &Rectangle) -> Self{
+        Self { width: rec.height, height: rec.width }
+    }
+
+    fn reverse(&mut self){
+        let h = self.height;
+        let w = self.width;
+
+        self.height = w;
+        self.width = h;
     }
 }
 
