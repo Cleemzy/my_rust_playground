@@ -48,7 +48,9 @@ fn main() {
         height: 20,
     };
 
-    println!("The area of the rectangle is : {} px square", rect.area());
+    // println!("The area of the rectangle is : {} px square", rect.area());
+
+    dbg!(rect);
 
 }
 
@@ -57,12 +59,15 @@ fn area(rec: Rectangle) -> u32 {
 }
 
 impl Rectangle{
+    // area method
     fn area(&self) -> u32 {
         self.width * self.height
     }
 }
 
 // Rectangle struct
+
+#[derive(Debug)]
 struct Rectangle{
     width: u32,
     height: u32
