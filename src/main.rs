@@ -9,17 +9,53 @@ fn main() {
 
     // dbg!(rect);
 
-    let ap = FlagshipBrand::Apple { definition: String::from("Brand for soy boys"), phone_model: String::from("the iCuck") };
-    let sam = FlagshipBrand::Samsung(String::from("The CHAD BRAND"));
+    // let ap = FlagshipBrand::Apple { definition: String::from("Brand for soy boys"), phone_model: String::from("the iCuck") };
+    // let sam = FlagshipBrand::Samsung(String::from("The CHAD BRAND"));
 
     // dbg!(ap);
     // dbg!(sam);
 
-    if let FlagshipBrand::Apple{definition, phone_model} = ap {
-        println!("definition : {}, phone_model : {}", definition, phone_model);
-    };
+    // if let FlagshipBrand::Apple{definition, phone_model} = ap {
+    //     println!("definition : {}, phone_model : {}", definition, phone_model);
+    // };
+
     // println!("");
 
+    // let an = Animals::Feline(Feline::Tiger);
+
+
+    // match an {
+    //     Animals::Canine => println!("a canine"),
+    //     Animals::Feline(a_feline) => println!("{:?}", a_feline),
+    // };
+
+
+    let o = Some(6);
+
+    let r = plus_one(o);
+
+    println!("{:?}", r);
+
+
+}
+
+fn plus_one(op: Option<i32>) -> Option<i32>{
+    match op {
+        None => None,
+        Some(t) => Some(t+1),
+    }
+}
+
+
+#[derive(Debug)]
+enum Feline{
+    Cat,
+    Tiger
+}
+
+enum Animals{
+    Canine,
+    Feline(Feline)
 }
 
 #[derive(Debug)]
