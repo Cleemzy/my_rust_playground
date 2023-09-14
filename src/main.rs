@@ -1,60 +1,31 @@
 fn main() {
 
-    // let text = String::from("text to work with");
-
-    // let first_word = first_word(&text);
-
-    // println!("TEXT: {text}|");
-    // println!("FIRST WORD OF TEXT: {first_word}|");
-
-    // println!("{text}");
-    
-    // let ans = replace_char_by(&text, ' ', '/');
-
-    // println!("{ans}");
-
-    // let vecs: Vec<i32> = vec![3,3,1];
-    // let target = 6;
-
-    // for (i, v) in vecs.iter().enumerate(){
-    //     println!("{i} {v}");
-    // }
-
-    // let t_sum = two_sum(vecs, target);
-
-    // for v in t_sum{
-    //     println!("{v}");
-    // }
-    
-    // let u1 = User{
-    //     username: String::from("marc"),
-    //     email: String::from("marc@mail.com"),
-    //     age: 50,
+    // let mut rect = Rectangle{
+    //     width: 55,
+    //     height: 20,
     // };
 
-    
+    // rect.reverse();
 
-    // let u2 = User{
-    //     username: String::from("tori"),
-    //     email: String::from("tori@mail.com"),
-    //     ..u1
-    // };
+    // dbg!(rect);
 
-    // print_user(&u1);
-    // print_user(&u2);
+    let ap = FlagshipBrand::Apple { definition: String::from("Brand for soy boys"), phone_model: String::from("the iCuck") };
+    let sam = FlagshipBrand::Samsung(String::from("The CHAD BRAND"));
 
-    let mut rect = Rectangle{
-        width: 55,
-        height: 20,
+    // dbg!(ap);
+    // dbg!(sam);
+
+    if let FlagshipBrand::Apple{definition, phone_model} = ap {
+        println!("definition : {}, phone_model : {}", definition, phone_model);
     };
+    // println!("");
 
-    // println!("The area of the rectangle is : {} px square", rect.area());
+}
 
-    // let rev = Rectangle::reverse_rectangle(&rect);
-    rect.reverse();
-
-    dbg!(rect);
-
+#[derive(Debug)]
+enum FlagshipBrand{
+    Apple{definition: String, phone_model: String},
+    Samsung(String)
 }
 
 fn area(rec: Rectangle) -> u32 {
