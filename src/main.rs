@@ -1,14 +1,13 @@
-use crate::try_outs::functions;
+use crate::try_outs::functions::Feline;
 pub mod try_outs;
-// pub mod try_outs;
+
 
 fn main() {
 
-    let o = Some(6);
+    let mut v = vec![100, 32, 57];
+    for i in &mut v {
+        *i += 50;
+    }
 
-    let r = functions::plus_one(o);
-
-    println!("{:?}", r);
-
-
+    dbg!(v);
 }
