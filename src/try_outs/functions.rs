@@ -1,3 +1,45 @@
+use std::collections::HashMap;
+
+// Return the mode of an array of integers
+pub fn mode_from_int_array(nbs: &[i32]) -> i32{
+    // convert the integers array into an integers vector
+    let vect = nbs.to_vec();
+
+    // Instantiating the hash map in which we will insert the values 
+    // of vec as keys and their respective occurence in the array as value 
+    let mut hm: HashMap<i32, i32> = HashMap::new();
+
+    // Iterating over the vect to count each occurence 
+    for v in &vect{
+        *hm.entry(*v).or_insert(0) +=1;
+    }
+
+    if let Some(mx) = hm.values().max(){
+        println!("Max value: {mx}");
+    };
+
+    // dbg!(hm);
+
+    0
+}
+
+
+// Return the median of an array of integers 
+pub fn median_from_int_array(nbs: &[i32]) -> i32 {
+    // convert the integers array into an integers vector 
+    let mut vect = nbs.to_vec();
+
+    
+    // Sort the vector
+    vect.sort();
+    
+    println!("And this is the sorted vector from the array");
+    dbg!(vect.clone());
+
+
+    // The median is the value at the middle of the vector when sorted
+    vect[vect.len() / 2]
+}
 
 #[derive(Debug)]
 pub enum Feline{
