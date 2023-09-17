@@ -1,4 +1,55 @@
-use std::{collections::HashMap, hash::Hash};
+use std::collections::HashMap;
+
+// Converts string to pig latin 
+pub fn from_string_to_pig_latin(text: &String) -> String{
+    // Instantiate an empty string to take the text to be converted
+    let mut pig_latin = String::new();
+
+    // Split the text removing all whitespace
+    let words = text.as_str().split_whitespace();
+
+    // Iterating over the words
+    for word in words{
+        // Get the first char
+        let first_ch = word.chars().next().unwrap();
+
+        // The first consonant of each word is moved to the end of the word and “ay” is added, so “first” becomes “irst-fay.”
+        if is_char_consonant(first_ch){
+            let other_chars = String::from(&word[1..]);
+            let first_ch_as_string = String::from(first_ch).as_str().to_lowercase();
+            pig_latin.push_str(format!("{other_chars}-{first_ch_as_string}ay ").as_str());
+            continue; 
+        }
+
+        // Words that start with a vowel have “hay” added to the end instead (“apple” becomes “apple-hay”).
+        if is_char_vowel(first_ch){
+            let other_chars = String::from(&word[..]);
+            pig_latin.push_str(format!("{other_chars}-hay ").as_str());
+        }
+
+    }
+
+    // Trim off unnecessary whitespace
+    String::from(pig_latin.as_str().trim())
+}
+
+// Checks if a char is a consonant
+fn is_char_consonant(ch: char) -> bool{
+    let consonants: [char; 42] = [
+        'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z',
+        'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'
+    ];
+
+    consonants.contains(&ch)
+
+}
+
+// Checks if a char is a vowel
+fn is_char_vowel(ch: char) -> bool{
+    let vowels: [char; 10] = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
+    vowels.contains(&ch)
+}
+
 
 // Return the mode of an array of integers
 pub fn mode_from_int_array(nbs: &[i32]) -> i32{
