@@ -7,14 +7,17 @@ fn main() {
 
     let arr = [-5, 4, 1, -3, 2, 6, 4, -9];
 
-    println!("This is the original array");
+    println!("Original array");
     dbg!(arr);
 
     let median = functions::median_from_int_array(&arr[..]);
 
-    println!("And this is the median :");
     dbg!(median);
 
-    functions::mode_from_int_array(&arr[..]);
+    let mode = functions::mode_from_int_array(&arr[..]);
+
+    dbg!(mode);
+
+    // println!("Median : {median} | Mode : {mode}");
 
 }

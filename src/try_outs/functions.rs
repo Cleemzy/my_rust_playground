@@ -1,26 +1,47 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, hash::Hash};
 
 // Return the mode of an array of integers
 pub fn mode_from_int_array(nbs: &[i32]) -> i32{
-    // convert the integers array into an integers vector
+    // convert the integers array into an integers vector 
     let vect = nbs.to_vec();
 
-    // Instantiating the hash map in which we will insert the values 
-    // of vec as keys and their respective occurence in the array as value 
-    let mut hm: HashMap<i32, i32> = HashMap::new();
+    // dbg!(vect);
 
-    // Iterating over the vect to count each occurence 
-    for v in &vect{
-        *hm.entry(*v).or_insert(0) +=1;
+    // Instantiate the map in which we will see the occurence of each value 
+    let mut hm:HashMap<i32, i32> = HashMap::new();
+
+    // Inserting the values in Vec inside the map and each key has its occurence as value
+    for nb in &vect{
+        // See if the key is already inserted inside the map
+        // If not insert it having a default value of 0
+        // Either way, it returns the pointer of the value of ths key and we increment it by dereferencing it
+        *hm.entry(*nb).or_insert(0) +=1;
     }
 
-    if let Some(mx) = hm.values().max(){
-        println!("Max value: {mx}");
+
+    // Instantiate the max value in which we will compare to each of the value of the hashmap hm
+    let mut max = single_value_from_hash_map(&hm);
+
+    // Finding the max inside the hashmap
+    for (_, v) in &hm{
+        // find for each iteration the max
+        if *v > max {max = *v}
     };
 
-    // dbg!(hm);
+    // Return the max corresponding key from the hashmap, hence, the mode
+    for (k, v) in &hm {
+        if *v == max {return *k;}
+    }
 
-    0
+    -1
+}
+
+// Get one value from a single iteration of hashmap if <i32, i32>
+fn single_value_from_hash_map(hm: &HashMap<i32, i32>) -> i32 {
+    for (_, v) in hm{
+        return *v;
+    };
+    -1
 }
 
 
