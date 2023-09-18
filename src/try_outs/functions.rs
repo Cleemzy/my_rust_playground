@@ -6,6 +6,9 @@ pub fn employee_management(){
         let mut str_input = String::new();
         let mut input_text = String::new();
         
+        // Hardcoding the departments into a vector
+        let departments = vec!["Engineering", "Accounting", "HR"];
+
         loop {
             // Invite user to input a record
             println!("Input a record of an employee");
@@ -19,7 +22,6 @@ pub fn employee_management(){
                 Ok(text) => text.clone(),
                 Err(err) => {
                     println!("Input error : {err}");
-                    println!("current string : {str_input} |");
                     str_input.clear();
                     continue;
                 }
@@ -35,9 +37,35 @@ pub fn employee_management(){
 
 // Checking input format
 pub fn check_input_format(input_txt: &String) -> Result<&String, Error>{
-    let txt = check_input_if_none(&input_txt)?;
-    let txt1 = ensures_string_has_4_words(txt)?;
-    Result::Ok(txt1)
+
+    let not_none_input = check_input_if_none(&input_txt)?;
+    let input_4words_ensured = ensures_string_has_4_words(&not_none_input)?;
+    let input_correct_words = ensures_words_are_correct(&input_4words_ensured)?;
+
+    Result::Ok(input_4words_ensured)
+}
+
+pub fn ensures_words_are_correct(input_txt: &String) -> Result<&String, Error> {
+    //  Split the input_text into words
+    let words: Vec<&str> = input_txt.split_whitespace().collect();
+
+    // Raises the below error if the first word is not "add"
+    if words.get(0).unwrap().to_lowercase() != "add" {
+        println!("oyy");
+        return Err(Error::new(ErrorKind::InvalidInput, "The first word should be : \"Add\" or \"add\""));
+    };
+
+    // Raises the below error if the third word is not "to"
+    if words.get(2).unwrap().to_lowercase() != "to" {
+        return Err(Error::new(ErrorKind::InvalidInput, "The third word should be : \"to\""));
+    };
+
+
+    // lowered_case = word.to_lowercase();
+
+
+
+    Result::Ok(input_txt)
 }
 
 // Ensures input string has 4 words
