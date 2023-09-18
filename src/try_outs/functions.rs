@@ -1,8 +1,8 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 // Implementation of the 3rd execise in 8.3
 pub mod employee_management{
-use std::{io::Error, io::ErrorKind};
+use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
 
     pub fn input_and_manage(){
             // Instantiate an empty mutable string for input
@@ -12,6 +12,8 @@ use std::{io::Error, io::ErrorKind};
             // Hardcoding the departments into a vector
             let departments = vec!["Engineering","Accounting","HR"];
 
+            // Hardcoding the employees into a vector
+            let employees: Vec<HashMap<String, String>> = hardcode_employees();
 
             loop {
                 // Invite user to input a record
@@ -37,6 +39,71 @@ use std::{io::Error, io::ErrorKind};
             // println!("Your input : {input_text}");
         
             // dbg!(input_text);
+    }
+
+    pub fn hardcode_employees() -> Vec<HashMap<String, String>> {
+        // ["Engineering","Accounting","HR"]
+
+        // Instantiate an empty Vec of employee Hashmaps
+        let mut employees: Vec<HashMap<String, String>> = Vec::new();
+
+        // Creating employees 
+        let employee1: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("Fabrice")),
+            (String::from("department"), String::from("Accounting"))
+        ]);
+
+        let employee2: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("Sarah")),
+            (String::from("department"), String::from("HR"))
+        ]);
+
+        let employee3: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("Jim")),
+            (String::from("department"), String::from("Engineering"))
+        ]);
+
+        let employee4: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("Marc")),
+            (String::from("department"), String::from("Accounting"))
+        ]);
+
+        let employee5: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("Paulette")),
+            (String::from("department"), String::from("HR"))
+        ]);
+
+        let employee6: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("Gus")),
+            (String::from("department"), String::from("Engineering"))
+        ]);
+
+        let employee7: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("Rodrigo")),
+            (String::from("department"), String::from("Accounting"))
+        ]);
+
+        let employee8: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("William")),
+            (String::from("department"), String::from("HR"))
+        ]);
+
+        let employee9: HashMap<String, String> = HashMap::from([
+            (String::from("name"), String::from("Hebert")),
+            (String::from("department"), String::from("Engineering"))
+        ]);
+        
+        employees.push(employee1);
+        employees.push(employee2);
+        employees.push(employee3);
+        employees.push(employee4);
+        employees.push(employee5);
+        employees.push(employee6);
+        employees.push(employee7);
+        employees.push(employee8);
+        employees.push(employee9);
+        
+        employees
     }
     
     // Checking input format
