@@ -13,7 +13,7 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
             let departments = vec!["Engineering","Accounting","HR"];
 
             // Hardcoding the employees into a vector
-            let employees: Vec<HashMap<String, String>> = hardcode_employees();
+            let mut employees: Vec<HashMap<String, String>> = hardcode_employees();
 
             loop {
                 // Invite user to input a record
@@ -33,12 +33,118 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
                     }
                 }; 
                 
+                // Gets out of the loop if there is no input error
                 break;
             }
-        
+
+            add_employee(&mut employees, &str_input);
+
+            let employees_nb = employees.iter().count();
+
+            dbg!(employees);
+            dbg!(employees_nb);
+
             // println!("Your input : {input_text}");
         
             // dbg!(input_text);
+    }
+
+    // Add user input into new employee having a department
+    fn add_employee(employees: &mut Vec<HashMap<String, String>>, input_txt: &str){
+        let (name, dep) = get_name_and_department(&(input_txt.to_string()));
+
+        employees.push(HashMap::from([
+            (String::from("name"), name),
+            (String::from("department"), dep)
+        ]));
+
+    }
+
+
+    // Get a tuple of the name and the department from the user input
+    fn get_name_and_department(input_txt: &String) -> (String, String){
+        let words: Vec<&str> = input_txt.split_whitespace().collect();
+
+        let name = words.get(1).unwrap();
+        let department = words.get(3).unwrap();
+
+        let conventional_name: String = word_to_conventional(name); // First char of name to uppercase
+        let conventional_department: String = word_to_conventional(department); // First char of department to uppercase
+
+        (conventional_name, conventional_department)
+    }
+
+    // First char of name to uppercase
+    fn word_to_conventional(text: &str) -> String{
+        // This line makes the first char to uppercase
+        let first_char = text.chars().next().unwrap().to_uppercase().next().unwrap();
+        let other_chars = &text[1..];
+
+        format!("{first_char}{other_chars}")
+   
+    }
+    
+    // Checking input format
+    pub fn check_input_format<'a>(input_txt: &'a String, departments: &'a Vec<&str>) -> Result<&'a String, Error>{
+    
+        let not_none_input = check_input_if_none(&input_txt)?;
+        let input_4words_ensured = ensures_string_has_4_words(&not_none_input)?;
+        let input_correct_words = ensures_words_are_correct(&input_4words_ensured, departments)?;
+    
+        Result::Ok(input_4words_ensured)
+    }
+    
+    pub fn ensures_words_are_correct<'a>(input_txt: &'a String, departments: &Vec<&str>) -> Result<&'a String, Error> {
+        //  Split the input_text into words
+        let words: Vec<&str> = input_txt.split_whitespace().collect();
+    
+        // Raises the below error if the first word is not "add"
+        if words.get(0).unwrap().to_lowercase() != "add" {
+            println!("oyy");
+            return Err(Error::new(ErrorKind::InvalidInput, "The first word should be : \"Add\" or \"add\""));
+        };
+    
+        // Raises the below error if the third word is not "to"
+        if words.get(2).unwrap().to_lowercase() != "to" {
+            return Err(Error::new(ErrorKind::InvalidInput, "The third word should be : \"to\""));
+        };
+    
+        // Getting the departments list in lowercase string and pushing them into this new empty Vec
+        let mut lowercase_departments_as_string: Vec<String> = Vec::new();
+        for department in departments{
+            lowercase_departments_as_string.push(department.to_lowercase());
+        }
+
+        // Checks inside the departments list if it contains the input department name, else returns the error below
+        let department_placeholder = words.get(3).unwrap().to_lowercase();
+        if ! lowercase_departments_as_string.contains(&department_placeholder){
+            let error_format = format!("{department_placeholder} is not found in the departments list");
+            return Err(Error::new(ErrorKind::InvalidInput, error_format));
+        };
+            
+    
+        Result::Ok(input_txt)
+    }
+    
+    // Ensures input string has 4 words
+    pub fn ensures_string_has_4_words(input_txt: &String) -> Result<&String, Error>{
+        //  Words counter
+        let words_nb = input_txt.split_whitespace().count();
+    
+        // Raise error if the input doesn't contain 4 words
+        if words_nb != 4{
+            return Err(Error::new(ErrorKind::InvalidInput, "Needs 4 words : the format is \"Add [employee] to [department]\" "));
+        };
+        Result::Ok(input_txt)
+    }
+    
+    // Checks if input string is not none (0 word)
+    pub fn check_input_if_none(input_txt: &String) -> Result<&String, Error>{
+        let words_nb = input_txt.as_str().split_whitespace().count();
+        if words_nb <= 0{
+            return Err(Error::new(ErrorKind::InvalidInput, "Input empty"));
+        };
+        Result::Ok(input_txt)
     }
 
     pub fn hardcode_employees() -> Vec<HashMap<String, String>> {
@@ -104,69 +210,6 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
         employees.push(employee9);
         
         employees
-    }
-    
-    // Checking input format
-    pub fn check_input_format<'a>(input_txt: &'a String, departments: &'a Vec<&str>) -> Result<&'a String, Error>{
-    
-        let not_none_input = check_input_if_none(&input_txt)?;
-        let input_4words_ensured = ensures_string_has_4_words(&not_none_input)?;
-        let input_correct_words = ensures_words_are_correct(&input_4words_ensured, departments)?;
-    
-        Result::Ok(input_4words_ensured)
-    }
-    
-    pub fn ensures_words_are_correct<'a>(input_txt: &'a String, departments: &Vec<&str>) -> Result<&'a String, Error> {
-        //  Split the input_text into words
-        let words: Vec<&str> = input_txt.split_whitespace().collect();
-    
-        // Raises the below error if the first word is not "add"
-        if words.get(0).unwrap().to_lowercase() != "add" {
-            println!("oyy");
-            return Err(Error::new(ErrorKind::InvalidInput, "The first word should be : \"Add\" or \"add\""));
-        };
-    
-        // Raises the below error if the third word is not "to"
-        if words.get(2).unwrap().to_lowercase() != "to" {
-            return Err(Error::new(ErrorKind::InvalidInput, "The third word should be : \"to\""));
-        };
-    
-        // Getting the departments list in lowercase string and pushing them into this new empty Vec
-        let mut lowercase_departments_as_string: Vec<String> = Vec::new();
-        for department in departments{
-            lowercase_departments_as_string.push(department.to_lowercase());
-        }
-
-        // Checks inside the departments list if it contains the input department name, else returns the error below
-        let department_placeholder = words.get(3).unwrap().to_lowercase();
-        if ! lowercase_departments_as_string.contains(&department_placeholder){
-            let error_format = format!("{department_placeholder} is not found in the departments list");
-            return Err(Error::new(ErrorKind::InvalidInput, error_format));
-        };
-            
-    
-        Result::Ok(input_txt)
-    }
-    
-    // Ensures input string has 4 words
-    pub fn ensures_string_has_4_words(input_txt: &String) -> Result<&String, Error>{
-        //  Words counter
-        let words_nb = input_txt.split_whitespace().count();
-    
-        // Raise error if the input doesn't contain 4 words
-        if words_nb != 4{
-            return Err(Error::new(ErrorKind::InvalidInput, "Needs 4 words : the format is \"Add [employee] to [department]\" "));
-        };
-        Result::Ok(input_txt)
-    }
-    
-    // Checks if input string is not none (0 word)
-    pub fn check_input_if_none(input_txt: &String) -> Result<&String, Error>{
-        let words_nb = input_txt.as_str().split_whitespace().count();
-        if words_nb <= 0{
-            return Err(Error::new(ErrorKind::InvalidInput, "Input empty"));
-        };
-        Result::Ok(input_txt)
     }
 }
 
