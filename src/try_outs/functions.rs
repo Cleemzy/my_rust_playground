@@ -10,8 +10,9 @@ use std::{io::Error, io::ErrorKind};
             let mut input_text = String::new();
             
             // Hardcoding the departments into a vector
-            let departments = vec!["Engineering", "Accounting", "HR"];
-    
+            let departments = vec!["Engineering","Accounting","HR"];
+
+
             loop {
                 // Invite user to input a record
                 println!("Input a record of an employee");
@@ -21,7 +22,7 @@ use std::{io::Error, io::ErrorKind};
                 std::io::stdin().read_line(&mut str_input).expect("Input error");
             
             
-                input_text = match check_input_format(&str_input) {
+                input_text = match check_input_format(&str_input, &departments) {
                     Ok(text) => text.clone(),
                     Err(err) => {
                         println!("Input error : {err}");
@@ -33,22 +34,22 @@ use std::{io::Error, io::ErrorKind};
                 break;
             }
         
-            println!("Your input : {input_text}");
+            // println!("Your input : {input_text}");
         
-            dbg!(input_text);
+            // dbg!(input_text);
     }
     
     // Checking input format
-    pub fn check_input_format(input_txt: &String) -> Result<&String, Error>{
+    pub fn check_input_format<'a>(input_txt: &'a String, departments: &'a Vec<&str>) -> Result<&'a String, Error>{
     
         let not_none_input = check_input_if_none(&input_txt)?;
         let input_4words_ensured = ensures_string_has_4_words(&not_none_input)?;
-        let input_correct_words = ensures_words_are_correct(&input_4words_ensured)?;
+        let input_correct_words = ensures_words_are_correct(&input_4words_ensured, departments)?;
     
         Result::Ok(input_4words_ensured)
     }
     
-    pub fn ensures_words_are_correct(input_txt: &String) -> Result<&String, Error> {
+    pub fn ensures_words_are_correct<'a>(input_txt: &'a String, departments: &Vec<&str>) -> Result<&'a String, Error> {
         //  Split the input_text into words
         let words: Vec<&str> = input_txt.split_whitespace().collect();
     
@@ -63,10 +64,19 @@ use std::{io::Error, io::ErrorKind};
             return Err(Error::new(ErrorKind::InvalidInput, "The third word should be : \"to\""));
         };
     
-    
-        // lowered_case = word.to_lowercase();
-    
-    
+        // Getting the departments list in lowercase string and pushing them into this new empty Vec
+        let mut lowercase_departments_as_string: Vec<String> = Vec::new();
+        for department in departments{
+            lowercase_departments_as_string.push(department.to_lowercase());
+        }
+
+        // Checks inside the departments list if it contains the input department name, else returns the error below
+        let department_placeholder = words.get(3).unwrap().to_lowercase();
+        if ! lowercase_departments_as_string.contains(&department_placeholder){
+            let error_format = format!("{department_placeholder} is not found in the departments list");
+            return Err(Error::new(ErrorKind::InvalidInput, error_format));
+        };
+            
     
         Result::Ok(input_txt)
     }
