@@ -1,4 +1,19 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, io::Error, io::ErrorKind};
+
+// Checking input format
+pub fn check_input_format(input_txt: &String) -> Result<&String, Error>{
+    let txt = check_input_if_none(&input_txt)?;
+    Result::Ok(txt)
+}
+
+// Checks if input string is not none (0 word)
+pub fn check_input_if_none(input_txt: &String) -> Result<&String, Error>{
+    let words_nb = input_txt.as_str().split_whitespace().count();
+    if words_nb <= 0{
+        return Err(Error::new(ErrorKind::InvalidInput, "Input empty"));
+    };
+    Result::Ok(input_txt)
+}
 
 // Converts string to pig latin 
 pub fn from_string_to_pig_latin(text: &String) -> String{
