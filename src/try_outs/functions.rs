@@ -25,7 +25,12 @@ pub fn from_string_to_pig_latin(text: &String) -> String{
         if is_char_vowel(first_ch){
             let other_chars = String::from(&word[..]);
             pig_latin.push_str(format!("{other_chars}-hay ").as_str());
+            continue;
         }
+
+        // In case it's neither starting with a consonant nor a vowel (a number for example)
+        // Just returns the word as it is
+        pig_latin.push_str(format!("{word} ").as_str());
 
     }
 
