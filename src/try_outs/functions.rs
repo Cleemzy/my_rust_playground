@@ -1,9 +1,55 @@
 use std::{collections::HashMap, io::Error, io::ErrorKind};
 
+// Implementation of the 3rd execise in 8.3
+pub fn employee_management(){
+        // Instantiate an empty mutable string for input
+        let mut str_input = String::new();
+        let mut input_text = String::new();
+        
+        loop {
+            // Invite user to input a record
+            println!("Input a record of an employee");
+        
+        
+            // Taking user input into a mutable string
+            std::io::stdin().read_line(&mut str_input).expect("Input error");
+        
+        
+            input_text = match check_input_format(&str_input) {
+                Ok(text) => text.clone(),
+                Err(err) => {
+                    println!("Input error : {err}");
+                    println!("current string : {str_input} |");
+                    str_input.clear();
+                    continue;
+                }
+            }; 
+            
+            break;
+        }
+    
+        println!("Your input : {input_text}");
+    
+        dbg!(input_text);
+}
+
 // Checking input format
 pub fn check_input_format(input_txt: &String) -> Result<&String, Error>{
     let txt = check_input_if_none(&input_txt)?;
-    Result::Ok(txt)
+    let txt1 = ensures_string_has_4_words(txt)?;
+    Result::Ok(txt1)
+}
+
+// Ensures input string has 4 words
+pub fn ensures_string_has_4_words(input_txt: &String) -> Result<&String, Error>{
+    //  Words counter
+    let words_nb = input_txt.split_whitespace().count();
+
+    // Raise error if the input doesn't contain 4 words
+    if words_nb != 4{
+        return Err(Error::new(ErrorKind::InvalidInput, "Needs 4 words : the format is \"Add [employee] to [department]\" "));
+    };
+    Result::Ok(input_txt)
 }
 
 // Checks if input string is not none (0 word)
