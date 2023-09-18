@@ -1,92 +1,96 @@
-use std::{collections::HashMap, io::Error, io::ErrorKind};
+use std::{collections::HashMap};
 
 // Implementation of the 3rd execise in 8.3
-pub fn employee_management(){
-        // Instantiate an empty mutable string for input
-        let mut str_input = String::new();
-        let mut input_text = String::new();
-        
-        // Hardcoding the departments into a vector
-        let departments = vec!["Engineering", "Accounting", "HR"];
+pub mod employee_management{
+use std::{io::Error, io::ErrorKind};
 
-        loop {
-            // Invite user to input a record
-            println!("Input a record of an employee");
-        
-        
-            // Taking user input into a mutable string
-            std::io::stdin().read_line(&mut str_input).expect("Input error");
-        
-        
-            input_text = match check_input_format(&str_input) {
-                Ok(text) => text.clone(),
-                Err(err) => {
-                    println!("Input error : {err}");
-                    str_input.clear();
-                    continue;
-                }
-            }; 
+    pub fn input_and_manage(){
+            // Instantiate an empty mutable string for input
+            let mut str_input = String::new();
+            let mut input_text = String::new();
             
-            break;
-        }
+            // Hardcoding the departments into a vector
+            let departments = vec!["Engineering", "Accounting", "HR"];
     
-        println!("Your input : {input_text}");
+            loop {
+                // Invite user to input a record
+                println!("Input a record of an employee");
+            
+            
+                // Taking user input into a mutable string
+                std::io::stdin().read_line(&mut str_input).expect("Input error");
+            
+            
+                input_text = match check_input_format(&str_input) {
+                    Ok(text) => text.clone(),
+                    Err(err) => {
+                        println!("Input error : {err}");
+                        str_input.clear();
+                        continue;
+                    }
+                }; 
+                
+                break;
+            }
+        
+            println!("Your input : {input_text}");
+        
+            dbg!(input_text);
+    }
     
-        dbg!(input_text);
-}
-
-// Checking input format
-pub fn check_input_format(input_txt: &String) -> Result<&String, Error>{
-
-    let not_none_input = check_input_if_none(&input_txt)?;
-    let input_4words_ensured = ensures_string_has_4_words(&not_none_input)?;
-    let input_correct_words = ensures_words_are_correct(&input_4words_ensured)?;
-
-    Result::Ok(input_4words_ensured)
-}
-
-pub fn ensures_words_are_correct(input_txt: &String) -> Result<&String, Error> {
-    //  Split the input_text into words
-    let words: Vec<&str> = input_txt.split_whitespace().collect();
-
-    // Raises the below error if the first word is not "add"
-    if words.get(0).unwrap().to_lowercase() != "add" {
-        println!("oyy");
-        return Err(Error::new(ErrorKind::InvalidInput, "The first word should be : \"Add\" or \"add\""));
-    };
-
-    // Raises the below error if the third word is not "to"
-    if words.get(2).unwrap().to_lowercase() != "to" {
-        return Err(Error::new(ErrorKind::InvalidInput, "The third word should be : \"to\""));
-    };
-
-
-    // lowered_case = word.to_lowercase();
-
-
-
-    Result::Ok(input_txt)
-}
-
-// Ensures input string has 4 words
-pub fn ensures_string_has_4_words(input_txt: &String) -> Result<&String, Error>{
-    //  Words counter
-    let words_nb = input_txt.split_whitespace().count();
-
-    // Raise error if the input doesn't contain 4 words
-    if words_nb != 4{
-        return Err(Error::new(ErrorKind::InvalidInput, "Needs 4 words : the format is \"Add [employee] to [department]\" "));
-    };
-    Result::Ok(input_txt)
-}
-
-// Checks if input string is not none (0 word)
-pub fn check_input_if_none(input_txt: &String) -> Result<&String, Error>{
-    let words_nb = input_txt.as_str().split_whitespace().count();
-    if words_nb <= 0{
-        return Err(Error::new(ErrorKind::InvalidInput, "Input empty"));
-    };
-    Result::Ok(input_txt)
+    // Checking input format
+    pub fn check_input_format(input_txt: &String) -> Result<&String, Error>{
+    
+        let not_none_input = check_input_if_none(&input_txt)?;
+        let input_4words_ensured = ensures_string_has_4_words(&not_none_input)?;
+        let input_correct_words = ensures_words_are_correct(&input_4words_ensured)?;
+    
+        Result::Ok(input_4words_ensured)
+    }
+    
+    pub fn ensures_words_are_correct(input_txt: &String) -> Result<&String, Error> {
+        //  Split the input_text into words
+        let words: Vec<&str> = input_txt.split_whitespace().collect();
+    
+        // Raises the below error if the first word is not "add"
+        if words.get(0).unwrap().to_lowercase() != "add" {
+            println!("oyy");
+            return Err(Error::new(ErrorKind::InvalidInput, "The first word should be : \"Add\" or \"add\""));
+        };
+    
+        // Raises the below error if the third word is not "to"
+        if words.get(2).unwrap().to_lowercase() != "to" {
+            return Err(Error::new(ErrorKind::InvalidInput, "The third word should be : \"to\""));
+        };
+    
+    
+        // lowered_case = word.to_lowercase();
+    
+    
+    
+        Result::Ok(input_txt)
+    }
+    
+    // Ensures input string has 4 words
+    pub fn ensures_string_has_4_words(input_txt: &String) -> Result<&String, Error>{
+        //  Words counter
+        let words_nb = input_txt.split_whitespace().count();
+    
+        // Raise error if the input doesn't contain 4 words
+        if words_nb != 4{
+            return Err(Error::new(ErrorKind::InvalidInput, "Needs 4 words : the format is \"Add [employee] to [department]\" "));
+        };
+        Result::Ok(input_txt)
+    }
+    
+    // Checks if input string is not none (0 word)
+    pub fn check_input_if_none(input_txt: &String) -> Result<&String, Error>{
+        let words_nb = input_txt.as_str().split_whitespace().count();
+        if words_nb <= 0{
+            return Err(Error::new(ErrorKind::InvalidInput, "Input empty"));
+        };
+        Result::Ok(input_txt)
+    }
 }
 
 // Converts string to pig latin 
