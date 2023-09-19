@@ -4,17 +4,17 @@ use std::collections::HashMap;
 pub mod employee_management{
 use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
 
-    pub fn input_and_manage(){
+    pub fn employee_management(){
             // Instantiate an empty mutable string for input
             let mut str_input = String::new();
-            let mut input_text = String::new();
             
             // Hardcoding the departments into a vector
-            let departments = vec!["Engineering","Accounting","HR"];
+            let departments = vec!["Engineering","Accounting","Sales"];
 
             // Hardcoding the employees into a vector
             let mut employees: Vec<HashMap<String, String>> = hardcode_employees();
 
+            // Loop until a the input of the new employee is correct 
             loop {
                 // Invite user to input a record
                 println!("Input a record of an employee");
@@ -24,7 +24,7 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
                 std::io::stdin().read_line(&mut str_input).expect("Input error");
             
             
-                input_text = match check_input_format(&str_input, &departments) {
+                match check_new_employee_input_format(&str_input, &departments) {
                     Ok(text) => text.clone(),
                     Err(err) => {
                         println!("Input error : {err}");
@@ -37,21 +37,143 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
                 break;
             }
 
+            // Push the employees Vec to add the new input one
             add_employee(&mut employees, &str_input);
 
-            let employees_nb = employees.iter().count();
+            // Taking user input into a mutable string
+            let mut dep_input = String::new();
 
-            dbg!(employees);
-            dbg!(employees_nb);
+            // Loop until a the input of the department to get the employees is correct
+            loop {
+                // Asking user to select a department to get all entries in that department
+                println!("Now would you list all entries in a selected department ? Select one among exiting departments : ");
+                for dep in departments.clone(){
+                    print!("[{dep}] ");
+                };
+    
+                
+                std::io::stdin().read_line(&mut dep_input).expect("Input error");
+                
+                match check_list_in_departments_input_format(&dep_input, &departments) {
+                    Ok(text) => text.clone(),
+                    Err(err) => {
+                        println!("Input error : {err}");
+                        dep_input.clear();
+                        continue;
+                    }
+                }; 
 
-            // println!("Your input : {input_text}");
-        
-            // dbg!(input_text);
+                // Gets out of the loop if there is no input error
+                break;
+            }
+
+            let mut filtered_employees = filter_employees_by_department(&dep_input, &employees);
+
+            
+            filtered_employees.sort_by(|a, b| a.get("name").unwrap().cmp(b.get("name").unwrap()));
+            employees.sort_by(|a, b| { 
+                let department_a = a.get("department").unwrap();
+                let department_b = b.get("department").unwrap();
+                let name_a = a.get("name").unwrap();
+                let name_b = b.get("name").unwrap();
+                
+                // Compare by department first
+                let department_comparison = department_a.cmp(department_b);
+                
+                // If the departments are the same, compare by name
+                if department_comparison == std::cmp::Ordering::Equal {
+                    name_a.cmp(name_b)
+                } else {
+                    department_comparison
+                }
+            });
+            
+            println!("List of employees in {dep_input} sorted alphabetically :");
+            for employee in  &filtered_employees  {
+                let name = employee.get("name").unwrap();
+                let department = employee.get("department").unwrap();
+                let text = format!("Name : {name} - Department : {department}");
+                println!("{text}");
+            }
+
+            println!("\r");
+
+            println!("List of all employees grouped by department and sorted alphabetically:");
+            for employee in  &employees  {
+                let name = employee.get("name").unwrap();
+                let department = employee.get("department").unwrap();
+                let text = format!("Name : {name} - Department : {department}");
+                println!("{text}");
+            }
+
+            // dbg!(employees);
+            // dbg!(filtered_employees);
+            
+            
     }
+
+    // Get all employees by the department input
+    fn filter_employees_by_department(dep_input: &String, employees: &Vec<HashMap<String, String>>) -> Vec<HashMap<String, String>>{
+        // Department key string
+        let department_key = String::from("department");
+        
+        // Gets the correct department string value
+        let conventional_dep_input: String = word_to_conventional(&dep_input);
+ 
+        // Instantiate the returned vector of employees
+        let mut filtered_list: Vec<HashMap<String, String>> = Vec::new();
+        
+        // Loop over the employees list and push users having the corresponding department name into the new list
+        for employee in employees.clone(){
+            
+            if employee.get(&department_key).unwrap() == &conventional_dep_input.trim(){
+                filtered_list.push(employee);
+            }
+        }
+
+        filtered_list
+    }
+
+
+    // Checks the input department if it is correct 
+    pub fn check_list_in_departments_input_format<'a>(input_txt: &'a String, departments: &'a Vec<&str>) -> Result<&'a String, Error>{
+    
+        let checked_input = check_if_dep_input_is_correct(input_txt)?;
+
+        // Getting the departments list in lowercase string and pushing them into this new empty Vec
+        let mut lowercase_departments_as_string: Vec<String> = Vec::new();
+        for department in departments{
+            lowercase_departments_as_string.push(department.to_lowercase());
+        }
+
+        // Checks inside the departments list if it contains the input department name, else returns the error below
+        let department_placeholder: String = checked_input.trim().to_lowercase();
+        if ! lowercase_departments_as_string.contains(&department_placeholder){
+            let error_format = format!("{department_placeholder} is not found in the departments list");
+            return Err(Error::new(ErrorKind::InvalidInput, error_format));
+        };
+    
+        Result::Ok(checked_input)
+    }
+
+    // Checks if input of department is correct (1 word only)
+    pub fn check_if_dep_input_is_correct(input_txt: &String) -> Result<&String, Error>{
+         //  Words counter
+         let words_nb = input_txt.split_whitespace().count();
+    
+         // Raise error if the input doesn't contain 4 words
+         if words_nb != 1{
+             return Err(Error::new(ErrorKind::InvalidInput, "Type any of these existing departments"));
+         };
+        Result::Ok(input_txt)
+    }
+
 
     // Add user input into new employee having a department
     fn add_employee(employees: &mut Vec<HashMap<String, String>>, input_txt: &str){
         let (name, dep) = get_name_and_department(&(input_txt.to_string()));
+
+        println!("You successfully added {name} to {dep} !");
 
         employees.push(HashMap::from([
             (String::from("name"), name),
@@ -85,7 +207,7 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
     }
     
     // Checking input format
-    pub fn check_input_format<'a>(input_txt: &'a String, departments: &'a Vec<&str>) -> Result<&'a String, Error>{
+    pub fn check_new_employee_input_format<'a>(input_txt: &'a String, departments: &'a Vec<&str>) -> Result<&'a String, Error>{
     
         let not_none_input = check_input_if_none(&input_txt)?;
         let input_4words_ensured = ensures_string_has_4_words(&not_none_input)?;
@@ -148,7 +270,7 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
     }
 
     pub fn hardcode_employees() -> Vec<HashMap<String, String>> {
-        // ["Engineering","Accounting","HR"]
+        // ["Engineering","Accounting","Sales"]
 
         // Instantiate an empty Vec of employee Hashmaps
         let mut employees: Vec<HashMap<String, String>> = Vec::new();
@@ -161,7 +283,7 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
 
         let employee2: HashMap<String, String> = HashMap::from([
             (String::from("name"), String::from("Sarah")),
-            (String::from("department"), String::from("HR"))
+            (String::from("department"), String::from("Sales"))
         ]);
 
         let employee3: HashMap<String, String> = HashMap::from([
@@ -176,7 +298,7 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
 
         let employee5: HashMap<String, String> = HashMap::from([
             (String::from("name"), String::from("Paulette")),
-            (String::from("department"), String::from("HR"))
+            (String::from("department"), String::from("Sales"))
         ]);
 
         let employee6: HashMap<String, String> = HashMap::from([
@@ -191,7 +313,7 @@ use std::{io::Error, io::ErrorKind, collections::HashMap, hash::Hash};
 
         let employee8: HashMap<String, String> = HashMap::from([
             (String::from("name"), String::from("William")),
-            (String::from("department"), String::from("HR"))
+            (String::from("department"), String::from("Sales"))
         ]);
 
         let employee9: HashMap<String, String> = HashMap::from([

@@ -5,6 +5,6 @@ pub mod try_outs;
 
 fn main() {
 
-    employee_management::input_and_manage();
+    employee_management::employee_management();
 
 }
