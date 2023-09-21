@@ -1,5 +1,6 @@
 pub mod functions;
 pub mod collections;
+pub mod generics;
 
 pub fn plus_one(op: Option<i32>) -> Option<i32>{
     match op {
