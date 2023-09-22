@@ -1,10 +1,10 @@
-use crate::try_outs::{functions::employee_management};
-// use crate::try_outs::gene
+// use crate::try_outs::{functions::employee_management};
+use crate::try_outs::generics::{self, User};
 
 pub mod try_outs;
 
 fn main() {
 
-    employee_management::employee_management();
+    generics::generic_function();
 
 }

@@ -1,15 +1,49 @@
-struct User<T>{
+pub fn generic_function(){
+    
+    println!("Generic function");
+
+    let mut u1 = User{
+        name: String::from("Sam"),
+        notes : 70
+    };
+
+    let mut u2 = User{
+        name: String::from("Momo"),
+        notes : 5
+    };
+
+    let mut u3 = User{
+        name: String::from("Hal"),
+        notes : 70.98
+    };
+
+    // dbg!(u1);
+    let utuple = u1.exchange_note(&mut u3);
+
+    dbg!(u1);
+    dbg!(u3);
+    dbg!(utuple);
+
+
+
+
+}
+// Definition of User struct to work with
+#[derive(Debug)]
+pub struct User<T>{
     name: String,
     notes: T
 }
 
-impl<T: std::fmt::Display + std::fmt::Debug> User<T>{
-    pub fn take_note_from_other(self, other: User<T>){
-        let my_current_notes = self.notes;
-        let other_s_name = other.name;
-        let other_s_notes = other.notes;
-        let new_notes = format!("My current notes : {:?} \n - Notes from {:?}  : {:?}", my_current_notes, other_s_name, other_s_notes);
-    
-        // self.notes = new_notes as T;
+
+impl<T: Copy> User<T>{
+
+    // Method implemented to exchange notes from one another
+    pub fn exchange_note<Y: Copy>(&self, other: &User<Y>) -> (User<Y>,User<T>){
+        
+        (User {name: self.name.clone(), notes: other.notes},
+        User {name: other.name.clone(), notes: self.notes})
+
     }
+    
 }
