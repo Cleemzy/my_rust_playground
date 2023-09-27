@@ -1,14 +1,18 @@
 // Main testing function for trying traits out
 
+use super::independents;
+
 pub fn traits_function(){
     let toutou : Dog = Dog{name: String::from("Toutou"), breed: String::from("sheperd")};
     let mimi : Cat = Cat{name: String::from("Mimi"), breed: String::from("orange")};
     let adolf : Dolphin = Dolphin { name: String::from("Adolf"), breed: String::from("Blyatler") };
 
+    let e_t : independents::Alien = independents::Alien{name: String::from("E.T"), race: String::from("Martian")};
 
     toutou.make_noise();
     mimi.make_noise();
     adolf.make_noise();
+    e_t.make_noise();
     
 }
 
