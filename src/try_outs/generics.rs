@@ -1,3 +1,52 @@
+// Main testing function for trying traits out
+
+pub fn traits_function(){
+    let toutou : Dog = Dog{name: String::from("Toutou"), breed: String::from("sheperd")};
+    let mimi : Cat = Cat{name: String::from("Mimi"), breed: String::from("orange")};
+
+    // println!("Traits function");
+
+    // dbg!(toutou);
+    // dbg!(mimi);
+
+    toutou.make_noise();
+    mimi.make_noise();
+    
+}
+
+// Testing traits on a common crate family (here simple example : Animal)
+pub trait Animal{
+    fn make_noise(&self);
+}
+
+// New type Dog
+#[derive(Debug)]
+pub struct Dog{
+    name: String,
+    breed: String
+}
+
+// New type Cat 
+#[derive(Debug)]
+pub struct Cat{
+    name: String,
+    breed: String
+}
+
+impl Animal for Dog {
+    fn make_noise(&self) {
+        println!("Wouf wouf");
+    }
+}
+
+impl Animal for Cat {
+    fn make_noise(&self) {
+        println!("Miaouw miaouw");
+    }
+}
+
+// 
+
 pub fn generic_function(){
     
     println!("Generic function");
