@@ -3,20 +3,20 @@
 pub fn traits_function(){
     let toutou : Dog = Dog{name: String::from("Toutou"), breed: String::from("sheperd")};
     let mimi : Cat = Cat{name: String::from("Mimi"), breed: String::from("orange")};
+    let adolf : Dolphin = Dolphin { name: String::from("Adolf"), breed: String::from("Blyatler") };
 
-    // println!("Traits function");
-
-    // dbg!(toutou);
-    // dbg!(mimi);
 
     toutou.make_noise();
     mimi.make_noise();
+    adolf.make_noise();
     
 }
 
 // Testing traits on a common crate family (here simple example : Animal)
 pub trait Animal{
-    fn make_noise(&self);
+    fn make_noise(&self){
+        println!("..blyat BLYAT");
+    }
 }
 
 // New type Dog
@@ -32,6 +32,13 @@ pub struct Cat{
     name: String,
     breed: String
 }
+
+pub struct Dolphin{
+    name: String,
+    breed: String
+}
+
+impl Animal for Dolphin{}
 
 impl Animal for Dog {
     fn make_noise(&self) {
