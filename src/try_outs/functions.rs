@@ -332,3 +332,19 @@ use std::{io::Error, io::ErrorKind, collections::HashMap};
         employees
     }
 }
+
+pub mod simple_functions{
+    pub fn do_things(){
+        // println!("Do things");
+        let text1 :&str = "heho";
+        let text2: &str = "hehoo";
+
+        let longest = longest_str(text1, text2);
+
+        println!("The longest is : {}", longest);
+    }
+
+    pub fn longest_str<'a>(text1: &'a str, text2: &'a str) -> &'a str{
+        if text1.len() < text2.len(){text2}else{text1}
+    }
+}
