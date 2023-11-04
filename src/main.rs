@@ -6,5 +6,5 @@ pub mod try_outs;
 
 fn main() {
 
-    simple_functions::do_things();
+    generics::traits_function();
 }

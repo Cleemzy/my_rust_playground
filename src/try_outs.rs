@@ -10,3 +10,13 @@ pub fn plus_one(op: Option<i32>) -> Option<i32>{
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn internal() {
+
+        assert_eq!(Some(4), plus_one(Some(3)));
+    }
+}
